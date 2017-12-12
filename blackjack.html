@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>Blackjack</title>
+    <script  src="https://code.jquery.com/jquery-3.2.1.min.js"integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <style media="screen">
+
+        .dealer {
+          border-radius: 15px;
+          height: 300px;
+          margin: auto;
+          text-align: center;
+        }
+
+        .dealer-text {
+          font-family: arial;
+          font-size: 1.6rem;
+          margin-top: 75%;
+          text-align: center;
+        }
+
+        .button-div {
+          margin-bottom: 3vh;
+        }
+
+        .player-one {
+          border-radius: 15px;
+          height: 300px;
+          margin: auto;
+          text-align: center;
+        }
+
+        .player-name {
+          font-family: arial;
+          font-size: 1.6rem;
+          margin-top: 65%;
+        }
+
+        /*.card-spot {
+          align-items: flex-start;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          justify-content: center;
+        }*/
+
+        .card-back {
+          border-radius: 10px;
+          height: 15%;
+          margin: 0px 5px;
+          width: 15%;
+        }
+
+        .card-front {
+          border-radius: 10px;
+          height: 15%;
+          margin: 0px 5px;
+          width: 15%;
+        }
+      </style>
+
+  </head>
+  <body class="green darken-4">
+    <div class="playmat">
+
+
+      <div class="row valign-wrapper">
+        <div class="card col s10 dealer green darken-3">
+          <span class="dealer-text">DEALER</span>
+          <div class="card-spot column">
+
+          </div>
+        </div>
+      </div>
+
+      <div class="button-div center-align">
+        <a class="deal waves-effect waves-light red btn">DEAL</a>
+        <a class="hit waves-effect waves-light red btn">HIT</a>
+        <a class="hit waves-effect waves-light red btn">Double Down</a>
+        <a class="hit waves-effect waves-light red btn">Split</a>
+        <a class="stay waves-effect waves-light red btn">STAY</a>
+      </div>
+
+      <div class="row valign-wrapper">
+        <div class="card col s10 player-one green darken-3">
+          <span class="player-name"></span>
+          <div class="card-spot column">
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <script type="text/javascript" src="app.js"></script>
+  </body>
+</html>
