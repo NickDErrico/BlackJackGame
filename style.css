@@ -30,14 +30,6 @@
       margin-top: 65%;
     }
 
-    /*.card-spot {
-      align-items: flex-start;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      justify-content: center;
-    }*/
-
     .card-back {
       border-radius: 10px;
       height: 15%;
@@ -47,7 +39,6 @@
 
     .card-front {
       border-radius: 10px;
-      height: 15%;
       margin: 0px 5px;
       width: 15%;
     }

@@ -13,7 +13,7 @@ $(document).ready(function() {
   let cardsOnTable = [];
   let count = 0;
 
-  $('.deal').click(function() {
+  let deal = $('.deal').click(function() {
     if (dealer.length === 2) {
       return
     }
@@ -37,24 +37,22 @@ $(document).ready(function() {
             dealer.push("<img class='card-front' src=" + cardImage + " alt='" + cards.cards[i].code + "'>")
             cardsOnTable.push(cards.cards[i])
             count++;
-            console.log(cardsOnTable);
           }else {
             return
             }
           }
         for (let j = 0; j < 2; j++) {
-          console.log(dealer);
-          console.log(player);
           $('.dealer .card-spot').append(dealer[j])
           $('.player-one .card-spot').append(player[j])
         }
       })
     })
-    $('.hit').click(function() {
+    let hit = $('.hit').click(function() {
       $.get('https://deckofcardsapi.com/api/deck/' + decks + '/draw/?count=1', function(cards) {
         for (let i = 0; i < cards.cards.length ; i++) {
           let cardImage = cards.cards[i].images.png;
           player.push("<img class='card-front' src=" + cardImage + " alt='" + cards.cards[i].code + "'>");
+          $('.player-one .card-spot').append(player[player.length -1])
           cardsOnTable.push(cards.cards[i])
         }
       })
