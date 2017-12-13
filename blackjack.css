@@ -1,7 +1,7 @@
 
     .dealer {
       border-radius: 15px;
-      height: 300px;
+      height: 290px;
       margin: auto;
       text-align: center;
     }
@@ -19,7 +19,7 @@
 
     .player-one {
       border-radius: 15px;
-      height: 300px;
+      height: 290px;
       margin: auto;
       text-align: center;
     }
@@ -41,4 +41,19 @@
       border-radius: 10px;
       margin: 0px 5px;
       width: 15%;
+    }
+
+    .card-fronts.split-cards {
+      border-radius: 10px;
+      margin: 0px 15px;
+      width: 15%;
+    }
+
+    .footer {
+      display: inline-flex;
+      width: 100%;
+    }
+
+    .footer p {
+      margin: 0px 15px;
     }

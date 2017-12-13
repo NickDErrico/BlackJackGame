@@ -1,0 +1,18 @@
+
+    .dealer {
+      border-radius: 15px;
+      height: 290px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .button-div {
+      margin-bottom: 3vh;
+    }
+
+    .player-one {
+      border-radius: 15px;
+      height: 290px;
+      margin: auto;
+      text-align: center;
+    }
