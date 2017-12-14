@@ -1,22 +1,22 @@
 $(document).ready(function() {
 
-  // $('.modal1').modal('open');
-
+  // $('.modal').modal();
+  // $('#modal1').modal('open');
+  //
   // let userName = prompt("Please enter your name", "<name goes here>");
   // $('.player-name').text(userName)
 
-  $.get('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6', function(data) {
-    // if (data.remaining <= 50) {
-    //   return
-    // }
+  $.get('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=3', function(data) {
 
+
+    let bet;
     let betAmt;
     let count = 0;
     let dealerHand = [];
     let dealerImages = [];
     let dealerTotal = 0;
     let decks = data['deck_id'];
-    let loss;
+    let lose;
     let playerHand = [];
     let playerImages = [];
     let playerTotal = 0;
@@ -36,7 +36,14 @@ $(document).ready(function() {
       "KING": 10,
       "ACE": 11
     }
-    let win;
+
+    function win() {
+      Number(betAmt) + Number($('#dollars').text())
+    }
+
+    function loss() {
+      Number(betAmt) - Number($('#dollars').text())
+    }
 
     function reset() {
       $('.card-spot').empty();
@@ -49,12 +56,9 @@ $(document).ready(function() {
       playerTotal = 0;
     }
 
-
-
-
-    let bet = $('.bet').click(function() {
-      betAmt = prompt("How much would you like to bet?", "Enter amount here");
-      // *********** let whatever = Number(betAmt) + Number($('#dollars').text()) ***************************
+    $('.bet').click(function() {
+      bet = prompt("How much would you like to bet?", "Enter amount here");
+      betAmt = Number(bet)
     })
 
     $('.deal').click(deal)
@@ -92,10 +96,22 @@ $(document).ready(function() {
           dealerTotal += pointValue[dealerHand[j].value];
           playerTotal += pointValue[playerHand[j].value];
         }
+        if (dealerTotal === 21) {
+          window.setTimeout(function() {
+            alert('DEALER HAS ' + dealerTotal + ' YOU LOSE!')
+            reset();
+            loss();
+          }, 500)
+        } else if (playerTotal === 21) {
+          $('.dealer .card-spot').find('img:first-child').after($("<img class='card-front' src='" + dealerHand[0].images.png + "' />")).remove();
+          alert('BLACKJACK!, YOU WIN!')
+          reset();
+          win();
+        }
       })
     }
 
-    let hit = $('.hit').click(function() {
+    $('.hit').click(function() {
       let cardImage;
       $.get('https://deckofcardsapi.com/api/deck/' + decks + '/draw/?count=1', function(cards) {
         for (let i = 0; i < cards.cards.length; i++) {
@@ -109,9 +125,8 @@ $(document).ready(function() {
               $('.dealer .card-spot').find('img:first-child').after($("<img class='card-front' src='" + dealerHand[0].images.png + "' />")).remove();
               alert('BLACKJACK!, YOU WIN!')
               reset();
+              win();
             }, 2000)
-            // }else if(playerTotal > 21 && playerHand.includes(playerHand.value === "ACE") {
-            //     playerTotal -= 10
           } else if (playerTotal > 21) {
             let containsAce = false
             for (let j = 0; j < playerHand.length; j++) {
@@ -122,62 +137,27 @@ $(document).ready(function() {
               }
             }
             if (!containsAce) {
-              console.log('bust');
               $('.dealer .card-spot').find('img:first-child').after($("<img class='card-front' src='" + dealerHand[0].images.png + "' />")).remove();
-              //$('.dealer .card-spot')[0].attr('src', dealerHand[0].images.png);
               window.setTimeout(function() {
                 alert(playerTotal + ' You busted')
                 reset();
+                loss();
               }, 2000)
             }
           }
         }
-        // for (let j = 0; j < playerHand.length; j++) {
-        //   console.log(playerTotal);
-        //   if(playerTotal > 21 && playerHand[j].value == "ACE") {
-        //     playerTotal -= 10
-        //   }else if(playerTotal > 21) {
-        //     alert(playerTotal + ' You busted');
-        //     return;
-        //     }
-        //   }
+
       })
     })
-    // **********************UNDER CONSTRUCTION*********************
-    // let split = $('.split').click(function() {
-    //   $('.card-spot img').removeClass('.card-front')
-    //   $('.card-spot img').addClass('.split-cards')
-    //   let cardsForSplit = 0;
-    //   $.get('https://deckofcardsapi.com/api/deck/' + decks + '/draw/?count=1', function(cards) {
-    //     if (cardsOnTable[0].code.length-1 === cardsOnTable[2].code.length-1) {
-    //       for (let i = 0; i < cards.cards.length ; i++) {
-    //         let cardImage = cards.cards[i].images.png;
-    //         player.push("<img class='card-front' src=" + cardImage + " alt='" + cards.cards[i].code + "'>");
-    //         cardsOnTable.push(cards.cards[i]);
-    //         cardsForSplit++;
-    //       }
-    //       for (let j = 1; j < 2; j++) {
-    //         if (cardsForSplit === 1) {
-    //           cardsOnTable.unshift(cards.cards[j]);
-    //           $('.player-one .card-spot').append(player[player.length -1]);
-    //           cardsForSplit++;
-    //         }else if(cardsForSplit === 2){
-    //           cardsOnTable.unshift(cards.cards[j]);
-    //           $('.player-one .card-spot').prepend(player[player.length -1]);
-    //         }else {
-    //           return;
-    //         }
-    //       }
-    //     }
-    //   })
-    // })
-    let stay = $('.stay').click(function() {
+
+    $('.stay').click(function() {
       window.setTimeout(function() {
         $('.dealer .card-spot').find('img:first-child').after($("<img class='card-front' src='" + dealerHand[0].images.png + "' />")).remove();
       }, 1000)
-      let cardImage;
-      if (dealerTotal <= 16) {
+
+      function dealerHit() {
         $.get('https://deckofcardsapi.com/api/deck/' + decks + '/draw/?count=1', function(cards) {
+          let cardImage;
           for (let i = 0; i < cards.cards.length; i++) {
             cardImage = cards.cards[i].images.png;
             dealerImages.push("<img class='card-front' src='" + cardImage + "' alt='" + cards.cards[i].code + "'>");
@@ -187,25 +167,32 @@ $(document).ready(function() {
           }
         })
       }
+      if (dealerTotal < 17) {
+        dealerHit()
+      }
       if (dealerTotal === 21) {
         window.setTimeout(function() {
           alert('DEALER HAS ' + dealerTotal + ' YOU LOSE!')
           reset();
+          loss();
         }, 2000)
       } else if (dealerTotal > 21) {
         window.setTimeout(function() {
           alert(dealerTotal + ' DEALER BUSTED, YOU WIN!')
           reset();
+          win();
         }, 2000)
-      } else if (dealerTotal >= playerTotal) {
+      } else if (dealerTotal >= playerTotal && dealerTotal < 21) {
         window.setTimeout(function() {
           alert("DEALER HAS " + dealerTotal + " YOU LOSE!")
           reset();
+          loss();
         }, 2000)
       } else if (dealerTotal < playerTotal) {
         window.setTimeout(function() {
           alert("DEALER HAS " + dealerTotal + " YOU WIN!")
           reset();
+          win();
         }, 2000)
       } else {
         return;
