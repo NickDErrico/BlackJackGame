@@ -8,9 +8,8 @@ $(document).ready(function() {
 
   $.get('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=3', function(data) {
 
-
-    let bet;
-    let betAmt;
+    let makeBet;
+    let betAmt = 0;
     let count = 0;
     let dealerHand = [];
     let dealerImages = [];
@@ -56,10 +55,28 @@ $(document).ready(function() {
       playerTotal = 0;
     }
 
-    $('.bet').click(function() {
-      bet = prompt("How much would you like to bet?", "Enter amount here");
-      betAmt = Number(bet)
-    })
+    function colorSwitch() {
+      $('.button-div a').removeClass('red');
+      $('.button-div a').addClass('grey');
+    }
+
+    if (betAmt === 0) {
+      colorSwitch();
+      $('.button-div .bet').removeClass('grey');
+      $('.button-div .bet').addClass('red')
+    }
+    if (betAmt !== 0 && count === 0) {
+      colorSwitch();
+      $('.button-div .deal').removeClass('grey');
+      $('.button-div .deal').addClass('red');
+    }
+
+    $('.bet').click(bet)
+
+    function bet() {
+      makeBet = prompt("How much would you like to bet?", "Enter amount here");
+      betAmt += Number(makeBet)
+    }
 
     $('.deal').click(deal)
 
@@ -97,16 +114,12 @@ $(document).ready(function() {
           playerTotal += pointValue[playerHand[j].value];
         }
         if (dealerTotal === 21) {
-          window.setTimeout(function() {
-            alert('DEALER HAS ' + dealerTotal + ' YOU LOSE!')
-            reset();
-            loss();
-          }, 500)
-        } else if (playerTotal === 21) {
           $('.dealer .card-spot').find('img:first-child').after($("<img class='card-front' src='" + dealerHand[0].images.png + "' />")).remove();
-          alert('BLACKJACK!, YOU WIN!')
+          alert('DEALER HAS ' + dealerTotal + ' YOU LOSE!')
           reset();
-          win();
+          loss();
+        } else if (playerTotal === 21) {
+          dealerHit();
         }
       })
     }
@@ -121,12 +134,7 @@ $(document).ready(function() {
           playerHand.push(cards.cards[i]);
           playerTotal += pointValue[cards.cards[i].value]
           if (playerTotal === 21) {
-            window.setTimeout(function() {
-              $('.dealer .card-spot').find('img:first-child').after($("<img class='card-front' src='" + dealerHand[0].images.png + "' />")).remove();
-              alert('BLACKJACK!, YOU WIN!')
-              reset();
-              win();
-            }, 2000)
+            dealerHit();
           } else if (playerTotal > 21) {
             let containsAce = false
             for (let j = 0; j < playerHand.length; j++) {
@@ -142,7 +150,7 @@ $(document).ready(function() {
                 alert(playerTotal + ' You busted')
                 reset();
                 loss();
-              }, 2000)
+              }, 100)
             }
           }
         }
@@ -151,9 +159,7 @@ $(document).ready(function() {
     })
 
     $('.stay').click(function() {
-      window.setTimeout(function() {
-        $('.dealer .card-spot').find('img:first-child').after($("<img class='card-front' src='" + dealerHand[0].images.png + "' />")).remove();
-      }, 1000)
+      $('.dealer .card-spot').find('img:first-child').after($("<img class='card-front' src='" + dealerHand[0].images.png + "' />")).remove();
 
       function dealerHit() {
         $.get('https://deckofcardsapi.com/api/deck/' + decks + '/draw/?count=1', function(cards) {
@@ -175,31 +181,29 @@ $(document).ready(function() {
           alert('DEALER HAS ' + dealerTotal + ' YOU LOSE!')
           reset();
           loss();
-        }, 2000)
+        }, 100)
       } else if (dealerTotal > 21) {
         window.setTimeout(function() {
           alert(dealerTotal + ' DEALER BUSTED, YOU WIN!')
           reset();
           win();
-        }, 2000)
+        }, 100)
       } else if (dealerTotal >= playerTotal && dealerTotal < 21) {
         window.setTimeout(function() {
           alert("DEALER HAS " + dealerTotal + " YOU LOSE!")
           reset();
           loss();
-        }, 2000)
+        }, 100)
       } else if (dealerTotal < playerTotal) {
         window.setTimeout(function() {
           alert("DEALER HAS " + dealerTotal + " YOU WIN!")
           reset();
           win();
-        }, 2000)
+        }, 100)
       } else {
         return;
       }
     })
 
   })
-
-
 })
