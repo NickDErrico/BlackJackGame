@@ -35,6 +35,7 @@ $(document).ready(function() {
       "KING": 10,
       "ACE": 11
     }
+    let lastAceIdx = 0
 
     function win() {
       Number(betAmt) + Number($('#dollars').text())
@@ -116,7 +117,7 @@ $(document).ready(function() {
         if (dealerTotal === 21) {
           $('.dealer .card-spot').find('img:first-child').after($(`<img class=card-front src=${dealerHand[0].images.png}>`)).remove();
           alert(`DEALER HAS ${dealerTotal}, YOU LOSE!`)
-          reset();
+          // reset();
           loss();
         } else if (playerTotal === 21) {
           dealerHit();
@@ -126,90 +127,96 @@ $(document).ready(function() {
 
     $('.hit').click(function() {
       let cardImage;
-      $.get('https://deckofcardsapi.com/api/deck/' + decks + '/draw/?count=1', function(cards) {
+      $.get(`https://deckofcardsapi.com/api/deck/${decks}/draw/?count=1`, function(cards) {
         for (let i = 0; i < cards.cards.length; i++) {
           cardImage = cards.cards[i].images.png;
           playerImages.push(`<img class=card-front src=${cardImage} alt=${cards.cards[i].code}>`);
           $('.player-one .card-spot').append(playerImages[playerImages.length - 1]);
           playerHand.push(cards.cards[i]);
           playerTotal += pointValue[cards.cards[i].value]
+          let idx = 0
+          while (playerTotal > 21 && idx < playerHand.length) {
+            if (playerHand[idx].value == "ACE") {
+              playerTotal -= 10;
+            }
+            idx++
+          }
           if (playerTotal === 21) {
             $('.dealer .card-spot').find('img:first-child').after($(`<img class=card-front src=${dealerHand[0].images.png}>`)).remove();
             dealerHit();
           } else if (playerTotal > 21) {
             $('.dealer .card-spot').find('img:first-child').after($(`<img class=card-front src=${dealerHand[0].images.png}>`)).remove();
-            let containsAce = false
-            for (let j = 0; j < playerHand.length; j++) {
-              if (playerHand[j].value == "ACE") {
-                playerTotal -= 10;
-                containsAce = true;
-                break;
-              }
-            }
-            if (!containsAce) {
-              window.setTimeout(function() {
-                alert(`${playerTotal} You busted`)
-                reset();
-                loss();
-              }, 100)
-            }
+            window.setTimeout(function() {
+              alert(`${playerTotal} You busted`)
+              reset();
+              loss();
+            }, 1000)
           }
         }
 
       })
     })
 
-    $('.stay').click(function(stay) {
+    function checkDealerTotal() {
+      console.log('dealer check');
+      if (dealerTotal < 17) {
+        underSeventeen();
+      } else {
+        overSeventeen();
+      }
+    }
+
+    $('.stay').click(function() {
+      console.log('start of stay');
       $('.dealer .card-spot').find('img:first-child').after($(`<img class=card-front src=${dealerHand[0].images.png} alt=${dealerHand[0].code}>`)).remove();
-      stay();
+      checkDealerTotal();
     })
 
+
     function dealerHit() {
-      $('.dealer .card-spot').find('img:first-child').after($(`<img class=card-front src=${dealerHand[0].images.png} alt=${dealerHand[0].code}>`)).remove();
-      $.get('https://deckofcardsapi.com/api/deck/' + decks + '/draw/?count=1', function(cards) {
-        let cardImage;
+      console.log('dealer hit');
+      let cardImage;
+      $.get(`https://deckofcardsapi.com/api/deck/${decks}/draw/?count=1`, function(cards) {
         for (let i = 0; i < cards.cards.length; i++) {
           cardImage = cards.cards[i].images.png;
           dealerImages.push(`<img class=card-front src=${cardImage} alt=${cards.cards[i].code}>`);
           dealerHand.push(cards.cards[i]);
           $('.dealer .card-spot').append(dealerImages[dealerImages.length - 1]);
           dealerTotal += pointValue[cards.cards[i].value];
+          checkDealerTotal();
         }
       })
     }
 
-    function stay() {
-      if (dealerTotal < 17) {
-        dealerHit()
-      }
+    function underSeventeen() {
+      console.log('under seventeen');
+      dealerHit();
+    }
+
+    function overSeventeen() {
+      console.log('over seventeen');
       if (dealerTotal === 21) {
-        window.setTimeout(function() {
-          alert(`DEALER HAS ${dealerTotal} YOU LOSE!`)
-          reset();
-          loss();
-        }, 100)
+        alert(`DEALER HAS ${dealerTotal} YOU LOSE!`)
+        reset();
+        loss();
       } else if (dealerTotal > 21) {
-        window.setTimeout(function() {
-          alert(`${dealerTotal} DEALER BUSTED, YOU WIN!`)
-          reset();
-          win();
-        }, 100)
+        alert(`${dealerTotal} DEALER BUSTED, YOU WIN!`)
+        reset();
+        win();
       } else if (dealerTotal > playerTotal && dealerTotal < 21) {
-        window.setTimeout(function() {
-          alert(`DEALER HAS ${dealerTotal} YOU LOSE!`)
-          reset();
-          loss();
-        }, 100)
+        alert(`DEALER HAS ${dealerTotal} YOU LOSE!`)
+        reset();
+        loss();
       } else if (dealerTotal < playerTotal) {
-        window.setTimeout(function() {
-          alert(`DEALER HAS ${dealerTotal} YOU WIN!`)
-          reset();
-          win();
-        }, 100)
+        alert(`DEALER HAS ${dealerTotal} YOU WIN!`)
+        reset();
+        win();
       } else {
         return;
       }
     }
+
+
 
   })
 })
