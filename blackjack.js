@@ -6,6 +6,9 @@ $(document).ready(function() {
   let userName = prompt("Please enter your name", "<name goes here>");
   $('.player-name').text(userName)
 
+
+
+
   $.get('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=3', function(data) {
 
     let makeBet;
@@ -37,13 +40,13 @@ $(document).ready(function() {
     }
     let lastAceIdx = -1
 
-    function win() {
-      Number(betAmt) + Number($('#dollars').text())
-    }
-
-    function loss() {
-      Number(betAmt) - Number($('#dollars').text())
-    }
+    // function win() {
+    //   Number(betAmt) + Number($('#dollars').text())
+    // }
+    //
+    // function loss() {
+    //   Number(betAmt) - Number($('#dollars').text())
+    // }
 
     function reset() {
       $('.card-spot').empty();
@@ -72,12 +75,12 @@ $(document).ready(function() {
     //   $('.button-div .deal').addClass('red');
     // }
 
-    $('.bet').click(bet)
-
-    function bet() {
-      makeBet = prompt("How much would you like to bet?", "Enter amount here");
-      betAmt += Number(makeBet)
-    }
+    // $('.bet').click(bet)
+    //
+    // function bet() {
+    //   makeBet = prompt("How much would you like to bet?", "Enter amount here");
+    //   betAmt += Number(makeBet)
+    // }
 
     $('.deal').click(deal)
 
