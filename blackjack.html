@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="./blackjack.css">
 
   </head>
-  <!-- Modal Structure -->
   <div id="modal1" class="modal black">
     <div class="modal-content">
       <h4>Welcome to Blackjack</h4>
@@ -31,7 +30,7 @@
 
       <div class="row valign-wrapper">
         <div class="card col s10 dealer green darken-3">
-          <span class="dealer-text">DEALER</span>
+          <span class="dealer-text yellow-text">DEALER</span>
           <div class="card-spot column">
 
           </div>
@@ -39,17 +38,17 @@
       </div>
 
       <div class="button-div center-align">
-        <!-- <a class="bet waves-effect waves-light grey btn">BET</a> -->
+        <a class="bet waves-effect waves-light red btn">BET</a>
         <a class="deal waves-effect waves-light red btn">DEAL</a>
         <a class="hit waves-effect waves-light red btn">HIT</a>
-        <!-- <a class="double-down waves-effect waves-light grey btn">DOUBLE DOWN</a> -->
-        <!-- <a class="split waves-effect waves-light grey btn">SPLIT</a> -->
+        <a class="double-down waves-effect waves-light grey btn">DOUBLE DOWN</a>
+        <a class="split waves-effect waves-light grey btn">SPLIT</a>
         <a class="stay waves-effect waves-light red btn">STAY</a>
       </div>
 
       <div class="row valign-wrapper">
         <div class="card col s10 player-one green darken-3">
-          <span class="player-name"></span>
+          <span class="player-name yellow-text"></span>
           <div class="card-spot column">
 
           </div>
@@ -59,9 +58,10 @@
     </div>
     <div class="footer-div green">
       <footer class="footer">
-        <!-- <p class="cash">Money: $<span id="dollars">100</span> </p>
-        <p class="wins">Wins = 0 </p>
-        <p class ="losses">Losses = 0</p> -->
+        <p class="cash">Money: $<span id="dollars">100</span></p>
+        <p class="wins">Wins = <span id="win-counter">0</span></p>
+        <p class ="losses">Losses = <span id="loss-counter">0</span></p>
+        <p class="total-bet">Total Bet = $<span id="bet-counter">0</span></p>
       </footer>
     </div>
     <script type="text/javascript" src="blackjack.js"></script>

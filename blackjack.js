@@ -1,10 +1,10 @@
 $(document).ready(function() {
 
-  $('.modal').modal();
-  $('#modal1').modal('open');
+  // $('.modal').modal();
+  // $('#modal1').modal('open');
 
-  let userName = prompt("Please enter your name", "<name goes here>");
-  $('.player-name').text(userName)
+  // let userName = prompt("Please enter your name", "<name goes here>");
+  // $('.player-name').text(userName)
 
 
 
@@ -13,15 +13,17 @@ $(document).ready(function() {
 
     let makeBet;
     let betAmt = 0;
+    let betCounter = 0;
     let count = 0;
     let dealerHand = [];
     let dealerImages = [];
     let dealerTotal = 0;
     let decks = data['deck_id'];
-    let lose;
+    let lossCount = 0;
     let playerHand = [];
     let playerImages = [];
     let playerTotal = 0;
+    let winCount = 0;
     let pointValue = {
       1: 1,
       2: 2,
@@ -40,13 +42,23 @@ $(document).ready(function() {
     }
     let lastAceIdx = -1
 
-    // function win() {
-    //   Number(betAmt) + Number($('#dollars').text())
-    // }
-    //
-    // function loss() {
-    //   Number(betAmt) - Number($('#dollars').text())
-    // }
+    function win() {
+      $('#dollars').text(Number($('#dollars').text()) + Number(betAmt))
+    }
+
+    function loss() {
+      $('#dollars').text(Number($('#dollars').text()) - Number(betAmt))
+    }
+
+    function addWin() {
+      winCount++;
+      $('#win-counter').text(Number(winCount));
+    }
+
+    function addLoss() {
+      lossCount++;
+      $('#loss-counter').text(Number(lossCount));
+    }
 
     function reset() {
       $('.card-spot').empty();
@@ -59,28 +71,35 @@ $(document).ready(function() {
       playerTotal = 0;
     }
 
-    // function colorSwitch() {
-    //   $('.button-div a').removeClass('red');
-    //   $('.button-div a').addClass('grey');
-    // }
-    //
-    // if (betAmt === 0) {
-    //   colorSwitch();
-    //   $('.button-div .bet').removeClass('grey');
-    //   $('.button-div .bet').addClass('red')
-    // }
-    // if (betAmt !== 0 && count === 0) {
-    //   colorSwitch();
-    //   $('.button-div .deal').removeClass('grey');
-    //   $('.button-div .deal').addClass('red');
-    // }
+    function colorSwitch() {
+      $('.button-div a').removeClass('red');
+      $('.button-div a').addClass('grey');
+    }
 
-    // $('.bet').click(bet)
-    //
-    // function bet() {
-    //   makeBet = prompt("How much would you like to bet?", "Enter amount here");
-    //   betAmt += Number(makeBet)
-    // }
+    if (betAmt === 0) {
+      colorSwitch();
+      $('.button-div .bet').removeClass('grey');
+      $('.button-div .bet').addClass('red')
+    }
+
+    if (betAmt !== 0 && count === 0) {
+      colorSwitch();
+      $('.button-div .deal').removeClass('grey');
+      $('.button-div .deal').addClass('red');
+    }
+
+    $('.bet').click(bet)
+
+    function bet() {
+      makeBet = prompt("How much would you like to bet?", "Enter amount here");
+      if (makeBet > Number($('#dollars').text())) {
+        alert("Sorry, but you don't have enough money. Please bet again.");
+        bet();
+      } else {
+        betAmt += Number(makeBet);
+        betCounter = $('#bet-counter').text(Number($('#bet-counter').text()) + Number(makeBet));
+      }
+    }
 
     $('.deal').click(deal)
 
@@ -123,6 +142,9 @@ $(document).ready(function() {
             alert(`DEALER HAS BLACKJACK, YOU LOSE!`)
             reset();
             loss();
+            addLoss();
+            betAmt = 0;
+            betCounter = 0;
           }, 500)
 
         } else if (playerTotal === 21) {
@@ -159,6 +181,9 @@ $(document).ready(function() {
               alert(`${playerTotal} YOU BUSTED!`)
               reset();
               loss();
+              addLoss();
+              betAmt = 0;
+              betCounter = 0;
             }, 500)
           }
         }
@@ -215,18 +240,30 @@ $(document).ready(function() {
         alert(`DEALER HAS ${dealerTotal} YOU LOSE!`)
         reset();
         loss();
+        addLoss();
+        betAmt = 0;
+        betCounter = 0;
       } else if (dealerTotal > 21) {
         alert(`DEALER HAS ${dealerTotal}, DEALER BUSTED, YOU WIN!`)
         reset();
         win();
+        addWin();
+        betAmt = 0;
+        betCounter = 0;
       } else if (dealerTotal > playerTotal && dealerTotal < 21) {
         alert(`DEALER HAS ${dealerTotal} YOU LOSE!`)
         reset();
         loss();
+        addLoss();
+        betAmt = 0;
+        betCounter = 0;
       } else if (dealerTotal < playerTotal) {
         alert(`DEALER HAS ${dealerTotal} YOU WIN!`)
         reset();
         win();
+        addWin();
+        betAmt = 0;
+        betCounter = 0;
       } else {
         return;
       }
